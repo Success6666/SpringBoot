@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springboot.springboot1.dao.ProductMapper">
+
+    <resultMap id="productResultMap" type="org.springboot.springboot1.entity.Product">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="categoryId" column="category_id"/>
+        <association property="category" javaType="org.springboot.springboot1.entity.Category">
+            <id property="categoryId" column="category_id"/>
+            <result property="categoryName" column="category_name"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="productResultMap">
+        SELECT p.id, p.name, p.price, p.category_id, c.category_name
+        FROM tb_product p
+        LEFT JOIN tb_category c ON p.category_id = c.category_id
+    </select>
+
+    <select id="findByCategoryId" resultMap="productResultMap">
+        SELECT p.id, p.name, p.price, p.category_id, c.category_name
+        FROM tb_product p
+        LEFT JOIN tb_category c ON p.category_id = c.category_id
+        WHERE p.category_id = #{categoryId}
+    </select>
+
+    <select id="findById" resultMap="productResultMap">
+        SELECT p.id, p.name, p.price, p.category_id, c.category_name
+        FROM tb_product p
+        LEFT JOIN tb_category c ON p.category_id = c.category_id
+        WHERE p.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.springboot.springboot1.entity.Product">
+        INSERT INTO tb_product (name, price, category_id) VALUES (#{name}, #{price}, #{categoryId})
+    </insert>
+
+    <update id="update" parameterType="org.springboot.springboot1.entity.Product">
+        UPDATE tb_product SET name = #{name}, price = #{price}, category_id = #{categoryId} WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM tb_product WHERE id = #{id}
+    </delete>
+
+</mapper>

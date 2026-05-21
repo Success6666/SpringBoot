@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>图书列表</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css"/>
+<link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}" href="../static/css/bootstrap-theme.min.css"/>
+
+</head>
+<body>
+	<div class="panel panel-primary">
+		<!-- .panel-heading 面板头信息。 -->
+		<div class="panel-heading">
+			<!-- .panel-title 面板标题。 -->
+			<h3 class="panel-title">图书列表</h3>
+		</div>
+	</div>
+	<div class="container">
+		<div class="col-md-12">
+			<div class="btn-group">
+				<button type="button" class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					分类 <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li><a th:href="@{/bookList}">所有分类</a></li>
+					<li th:each="category : ${categoryList}">
+						<a th:href="@{'/bookList/category/' + ${category.categoryId}}"
+							th:text="${category.categoryName}">分类</a>
+					</li>
+				</ul>
+			</div>
+
+			<button type="button" class="btn btn-success pull-right"
+				th:onclick="'gotoAddBook()'" th:if="${isAdmin}">添加图书</button>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">图书信息列表</h3>
+				</div>
+				<div class="panel-body">
+					<!-- table-responsive:响应式表格,在一个表展示所有的数据,当不够显示的时候可以左右滑动浏览-->
+					<div class="table table-responsive">
+						 <table class="table table-bordered table-hover">
+							<tr>
+								<th class="text-center">序号</th>
+								<th class="text-center">封面</th>
+								<th class="text-center">书名</th>
+								<th class="text-center">作者</th>
+								<th class="text-center">价格</th>
+								<th class="text-center">分类</th>
+								<th class="text-center" th:if="${isAdmin}">操作</th>
+							</tr>
+							<tbody class="text-center">
+
+							 	<tr th:each="book,stat : ${books}">
+									<td th:text="${stat.index + 1}">1</td>
+									<td><img src="../static/img/java.jpg"
+											 th:src="@{'/img/'+${book.image}}" height="60"/></td>
+									<td><a th:href="@{'/bookDetail/'+${book.bookId}}" th:text="${book.title}">疯狂Java讲义</a></td>
+									<td th:text="${#strings.abbreviate(book.author, 6)}">李刚</td>
+									<td th:text="${book.price}" th:style="${book.price >= 100} ? 'color:red' : ''">109.0</td>
+									<td th:text="${book.category != null ? book.category.categoryName : '未分类'}">未分类</td>
+									<td th:if="${isAdmin}">
+										<a th:href="@{'/editBook/'+${book.bookId}}" class="btn btn-primary btn-sm">编辑</a>
+										<a th:href="@{'/deleteBook/'+${book.bookId}}" class="btn btn-danger btn-sm"
+										   onclick="return confirm('确定要删除这本书吗？')">删除</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/jquery-1.11.0.min.js}"  src="../static/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+		<!-- inline scripts related to this page -->
+		<script  th:inline="javascript">
+
+		function gotoAddBook(){
+			window.location.href="/addbook";
+		}
+
+
+		</script>
+</body>
+</html>

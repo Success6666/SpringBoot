@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springboot.springboot1.dao.BookMapper">
+    <resultMap id="BookCategoryMap" type="Book">
+        <id column="bookId" property="bookId" />
+        <result column="title" property="title" />
+        <result column="image" property="image" />
+        <result column="author" property="author" />
+        <result column="price" property="price" />
+        <!-- tb_book table currently has no category column; category and categoryId remain null -->
+    </resultMap>
+
+    <select id="getBooks" resultMap="BookCategoryMap">
+        select b.bookId, b.title, b.image, b.author, b.price
+        from tb_book b
+    </select>
+
+    <select id="getBookById" resultMap="BookCategoryMap">
+        select b.bookId, b.title, b.image, b.author, b.price
+        from tb_book b
+        where b.bookId = #{bookId}
+    </select>
+
+    <select id="getBooksByCategoryId" resultMap="BookCategoryMap">
+        <!-- tb_book has no category link; return all books for any category filter -->
+        select b.bookId, b.title, b.image, b.author, b.price
+        from tb_book b
+    </select>
+
+    <insert id="addBook" parameterType="Book">
+        INSERT INTO tb_book (bookId, author, image, price, title)
+        VALUES (#{bookId}, #{author}, #{image}, #{price}, #{title})
+    </insert>
+
+    <update id="updateBook" parameterType="Book">
+        UPDATE tb_book
+        SET author = #{author}, image = #{image},
+            price = #{price}, title = #{title}
+        WHERE bookId = #{bookId}
+    </update>
+
+    <delete id="deleteBook" parameterType="int">
+        delete from tb_book where bookId = #{bookId}
+    </delete>
+</mapper>

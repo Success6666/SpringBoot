@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>访问被拒绝</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css"/>
+</head>
+<body style="text-align: center; margin-top: 100px;">
+<div class="container">
+    <h2>403 - 访问被拒绝</h2>
+    <p class="text-danger">您没有权限访问该资源。</p>
+    <div th:if="${#request.getAttribute('deniedUrl')}">
+        <p>被拒绝的 URL：<span th:text="${#request.getAttribute('deniedUrl')}"></span></p>
+    </div>
+    <div th:if="${#request.getAttribute('deniedUser')}">
+        <p>当前用户：<span th:text="${#request.getAttribute('deniedUser')}"></span></p>
+    </div>
+    <div th:if="${#request.getAttribute('deniedMessage')}">
+        <p>提示：<span th:text="${#request.getAttribute('deniedMessage')}"></span></p>
+    </div>
+    <a href="/" class="btn btn-primary">返回首页</a>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>编辑产品页面</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css" />
+<link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}" href="../static/css/bootstrap-theme.min.css" />
+</head>
+<body>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h3 class="panel-title">编辑产品</h3>
+		</div>
+	</div>
+	<div class="container">
+		<div class="col-sm-12">
+				<form th:action="@{/product/edit}" th:object="${product}" class="form-horizontal" role="form" method="post" >
+						<input type="hidden" th:field="*{id}" />
+                        <div class="form-group">
+                            <label for="product_name" class="col-sm-3 control-label">产品名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="product_name" th:field="*{name}" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_price" class="col-sm-3 control-label">售价</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="product_price" th:field="*{price}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_category" class="col-sm-3 control-label">分类</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="product_category" th:field="*{categoryId}">
+                                    <option value="">请选择分类</option>
+                                    <option th:each="category : ${categoryList}"
+                                            th:value="${category.categoryId}"
+                                            th:text="${category.categoryName}">分类</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                 <button type="submit" class="btn btn-success">保存</button>
+                                 <a href="/product/list" class="btn btn-default">取消</a>
+                            </div>
+                        </div>
+                    </form>
+		</div>
+	</div>
+</body>
+</html>

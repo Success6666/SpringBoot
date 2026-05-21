@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title>产品列表</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css"/>
+<link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}" href="../static/css/bootstrap-theme.min.css"/>
+
+</head>
+<body>
+	<div class="panel panel-primary">
+		<!-- .panel-heading 面板头信息。 -->
+		<div class="panel-heading">
+			<!-- .panel-title 面板标题。 -->
+			<h3 class="panel-title">产品列表</h3>
+		</div>
+	</div>
+	<div class="container">
+		<div class="col-md-12">
+			<div class="btn-group">
+				<button type="button" class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					分类 <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li><a th:href="@{/product/list}">所有分类</a></li>
+					<li th:each="category : ${categoryList}">
+						<a th:href="@{'/product/findByCategoryId/' + ${category.categoryId}}"
+							th:text="${category.categoryName}">分类</a>
+					</li>
+				</ul>
+			</div>
+
+			<button type="button" class="btn btn-success pull-right"
+				th:onclick="'gotoAddProduct()'" th:if="${isAdmin}">添加产品</button>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">产品信息列表</h3>
+				</div>
+				<div class="panel-body">
+					<!-- table-responsive:响应式表格,在一个表展示所有的数据,当不够显示的时候可以左右滑动浏览-->
+					<div class="table table-responsive">
+						 <table class="table table-bordered table-hover">
+							<tr>
+								<th class="text-center">序号</th>
+								<th class="text-center">产品名称</th>
+								<th class="text-center">价格</th>
+								<th class="text-center">分类</th>
+								<th class="text-center" th:if="${isAdmin}">操作</th>
+							</tr>
+							<tbody class="text-center">
+
+							 	<tr th:each="product,stat : ${productList}">
+									<td th:text="${stat.index + 1}">1</td>
+									<td><a th:href="@{'/product/details/'+${product.id}}" th:text="${product.name}">产品名称</a></td>
+									<td th:text="${product.price}" th:style="${product.price >= 100} ? 'color:red' : ''">99.8</td>
+									<td th:text="${product.category != null ? product.category.categoryName : '未分类'}">未分类</td>
+									<td th:if="${isAdmin}">
+										<a th:href="@{'/product/edit/'+${product.id}}" class="btn btn-primary btn-sm">编辑</a>
+										<a th:href="@{'/product/delete/'+${product.id}}" class="btn btn-danger btn-sm"
+										   onclick="return confirm('确定要删除该产品吗？')">删除</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/jquery-1.11.0.min.js}"  src="../static/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+		<!-- inline scripts related to this page -->
+		<script  th:inline="javascript">
+
+		function gotoAddProduct(){
+			window.location.href="/product/add";
+		}
+
+
+		</script>
+</body>
+</html>

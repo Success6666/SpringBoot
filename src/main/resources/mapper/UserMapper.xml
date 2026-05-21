@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springboot.springboot1.dao.UserMapper">
+
+    <resultMap id="userResultmap" type="org.springboot.springboot1.entity.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <collection property="roles" ofType="org.springboot.springboot1.entity.Role">
+            <id property="id" column="role_id"/>
+            <result property="name" column="authority"/>
+        </collection>
+    </resultMap>
+
+    <select id="getUserByUsername" resultType="org.springboot.springboot1.entity.User">
+        select * from tb_user where username = #{username}
+    </select>
+
+    <select id="getUserRoleByUsername" resultMap="userResultmap">
+        SELECT u.id id, username, `password`, r.role_id, r.authority
+        FROM tb_user u
+        LEFT JOIN tb_user_role ur ON u.id = ur.user_id
+        LEFT JOIN tb_role r ON r.role_id = ur.authority_id
+        WHERE username = #{username}
+    </select>
+
+    <!-- 插入新用户并返回生成的主键 id -->
+    <insert id="insertUser" parameterType="org.springboot.springboot1.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_user (username, `password`) VALUES (#{username}, #{password})
+    </insert>
+
+    <!-- 为用户分配角色，params: userId, roleId -->
+    <insert id="insertUserRole" parameterType="map">
+        INSERT INTO tb_user_role (user_id, authority_id) VALUES (#{userId}, #{roleId})
+    </insert>
+
+</mapper>
